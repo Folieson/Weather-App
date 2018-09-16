@@ -15,7 +15,7 @@ class LoginFormController: UIViewController {
     @IBOutlet var loginInput: UITextField!
     @IBOutlet var passwordInput: UITextField!
     @IBAction func loginButtonPressed(_ sender: UIButton) {
-        
+       /*
         // Получаем текст логина
         let login = loginInput.text
         
@@ -27,7 +27,7 @@ class LoginFormController: UIViewController {
             print("успешная авторизация")
         } else {
             print("неуспешная авторизация")
-        }
+        } */
     }
     
     override func viewDidLoad() {
@@ -83,21 +83,44 @@ class LoginFormController: UIViewController {
         self.scrollView?.endEditing(true)
     }
 
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    // Проверка логина и пароля перед срабатыванием segue
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        // Проверяем данные
+        let checkResult = checkUserData()
+        
+        // Если данные неверны, покажем ошибку
+        if !checkResult {
+            showLoginError()
+        }
+        
+        // Вернем результат
+        return checkResult
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func checkUserData() -> Bool {
+        let login = loginInput.text!
+        let password = passwordInput.text!
+        
+        if login == "admin" && password == "123456" {
+            return true
+        } else {
+            return false
+        }
     }
-    */
+    
+    func showLoginError() {
+        // Создаем контроллер
+        let alert = UIAlertController(title: "Ошибка", message: "Введены неверные данные пользователя", preferredStyle: .alert)
+        
+        // Создаем кнопку для UIAlertController
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        
+        // Добавляем кнопку на UIAlertController
+        alert.addAction(action)
+        
+        // Показываем UIAlertController
+        present(alert, animated: true, completion: nil)
+    }
+    
 
 }
